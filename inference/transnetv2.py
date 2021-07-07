@@ -14,6 +14,14 @@ class TransNetV2:
                 print(f"[TransNetV2] Using weights from {model_dir}.")
 
         self._input_size = (27, 48, 3)
+
+        # limit gpu memory
+        # @see https://www.tensorflow.org/guide/gpu
+        gpus = tf.config.experimental.list_physical_devices('GPU')
+        if gpus:
+            for gpu in gpus:
+                tf.config.experimental.set_memory_growth(gpu, True)
+
         try:
             self._model = tf.saved_model.load(model_dir)
         except OSError as exc:
